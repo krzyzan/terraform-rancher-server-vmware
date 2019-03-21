@@ -36,6 +36,11 @@ runcmd:
 # Horrible trickery to overcome non-persistent /etc in RancherOS
 - [mkdir, -p, /opt/letsencrypt, /etc/letsencrypt]
 - [mount, -o, bind, /opt/letsencrypt, /etc/letsencrypt]
+# Expose certs as directory volume, as docker cannot handle changes to file volumes when certbot changes symlinks
+- [mkdir, -p, /etc/rancher/ssl]
+- [ln, -sf, /etc/letsencrypt/live/${hostname}.${domain}/cert.pem, /etc/rancher/ssl/cert.pem]
+- [ln, -sf, /etc/letsencrypt/live/${hostname}.${domain}/privkey.pem, /etc/rancher/ssl/key.pem]
+- [ln, -sf, /etc/letsencrypt/live/${hostname}.${domain}/chain.pem, /etc/rancher/ssl/cacerts.pem]
 rancher:
   network:
     dns: # Configure name servers and search domains
@@ -59,6 +64,17 @@ rancher:
       - /var/lib/letsencrypt:/var/lib/letsencrypt
       labels:
         cron.schedule: "0 */12 * * *"
+    rancher-server:
+      image: rancher/rancher:latest
+      restart: unless-stopped
+      ports:
+      - 80:80
+      - 443:443
+      volumes:
+      - /etc/rancher/ssl:/etc/rancher/ssl:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      labels:
+        io.rancher.os.after: certbot
   services_include:
     crontab: true
     open-vm-tools: true
