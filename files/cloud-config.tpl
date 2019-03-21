@@ -14,6 +14,28 @@ write_files: # Customize NTP daemon
     restrict [::1]
     restrict localhost
     interface listen 127.0.0.1
+- path: /opt/letsencrypt/cli.ini
+  permissions: "0640"
+  owner: root
+  content: |
+    # Let's Encrypt site-wide configuration
+    email = ${letsencrypt_email}
+    server = ${letsencrypt_server}
+    dns-cloudflare = True
+    dns-cloudflare-credentials = /etc/letsencrypt/cloudflare.ini
+    agree-tos = True
+    preferred-challenges = dns
+- path: /opt/letsencrypt/cloudflare.ini
+  permissions: "0400"
+  owner: root
+  content: |
+    # Cloudflare API credentials used by Certbot
+    dns_cloudflare_email = ${cloudflare_email}
+    dns_cloudflare_api_key = ${cloudflare_api_key}
+runcmd:
+# Horrible trickery to overcome non-persistent /etc in RancherOS
+- [mkdir, -p, /opt/letsencrypt, /etc/letsencrypt]
+- [mount, -o, bind, /opt/letsencrypt, /etc/letsencrypt]
 rancher:
   network:
     dns: # Configure name servers and search domains
@@ -28,6 +50,15 @@ rancher:
         gateway: ${gateway}
         mtu: 1500
         dhcp: false
+  services:
+    certbot:
+      image: certbot/dns-cloudflare
+      command: ['certonly', '--non-interactive', '--domains', '${hostname}.${domain}']
+      volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/lib/letsencrypt:/var/lib/letsencrypt
+      labels:
+        cron.schedule: "0 */12 * * *"
   services_include:
     crontab: true
     open-vm-tools: true

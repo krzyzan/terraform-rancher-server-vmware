@@ -10,5 +10,9 @@ data "template_file" "vm" {
     secondary_ns = "${var.guest_secondary_dns}"
     address = "${var.guest_static_ip}"
     domain = "${var.guest_domain}"
+    letsencrypt_email = "${var.cloudflare_email}"
+    letsencrypt_server = "${var.letsencrypt_server}"
+    cloudflare_email = "${var.cloudflare_email}"
+    cloudflare_api_key = "${var.cloudflare_api_key}"
   }
 }

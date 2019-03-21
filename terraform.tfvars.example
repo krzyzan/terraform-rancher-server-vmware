@@ -20,4 +20,11 @@ guest_primary_dns = "8.8.8.8"
 guest_secondary_dns = "8.8.4.4"
 guest_authorized_ssh_key = "ssh-rsa abcdef user@host",
 
+letsencrypt_email = "email@example.com"
+# Use the ACME v2 staging URI for testing things
+letsencrypt_server = https://acme-staging-v02.api.letsencrypt.org/directory
+# Production ACME v2 API endpoint
+#letsencrypt_server = https://acme-v02.api.letsencrypt.org/directory
 
+cloudflare_email = "email@example.com"
+cloudflare_api_key = "1234567890123456789012345678901234567"

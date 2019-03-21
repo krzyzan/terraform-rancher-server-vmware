@@ -103,3 +103,23 @@ variable "guest_domain" {
 variable "guest_authorized_ssh_key" {
   type = "string"
 }
+
+#-----------------------------------------#
+# LetsEncrypt configuration
+#-----------------------------------------#
+
+variable "letsencrypt_email" {
+  type = "string"
+}
+
+variable "letsencrypt_server" {
+  type = "string"
+}
+
+variable "cloudflare_email" {
+  type = "string"
+}
+
+variable "cloudflare_api_key" {
+  type = "string"
+}
