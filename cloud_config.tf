@@ -2,7 +2,7 @@
 data "template_file" "vm" {
   template = "${file("${path.module}/files/cloud-config.tpl")}"
 
-  vars {
+  vars = {
     authorized_key = "${tls_private_key.provisioning_key.public_key_openssh}"
     hostname = "${var.guest_hostname}"
     gateway = "${var.guest_default_gateway}"
