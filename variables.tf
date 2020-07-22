@@ -116,10 +116,10 @@ variable "letsencrypt_server" {
   type = string
 }
 
-variable "cloudflare_email" {
+variable "luadns_email" {
   type = string
 }
 
-variable "cloudflare_api_key" {
+variable "luadns_token" {
   type = string
 }

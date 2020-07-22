@@ -26,5 +26,5 @@ letsencrypt_server = https://acme-staging-v02.api.letsencrypt.org/directory
 # Production ACME v2 API endpoint
 #letsencrypt_server = https://acme-v02.api.letsencrypt.org/directory
 
-cloudflare_email = "email@example.com"
-cloudflare_api_key = "1234567890123456789012345678901234567"
+luadns_email = "email@example.com"
+luadns_token = "1234567890123456789012345678901234567"
