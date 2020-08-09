@@ -65,7 +65,7 @@ rancher:
       labels:
         cron.schedule: "0 */12 * * *"
     rancher-server:
-      image: rancher/rancher:latest
+      image: rancher/rancher:stable
       restart: unless-stopped
       ports:
       - 80:80
